@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-
+import Header from "./components/header.jsx";
+import Footer from "./components/footer.jsx";
 const PhoneDirectory = () => {
     const [searchText, setSearchText] = useState("");
     const [filters, setFilters] = useState({
@@ -235,26 +236,7 @@ const PhoneDirectory = () => {
 
     return (
         <div className="font-['Cairo'] min-h-screen bg-gray-100">
-            {/* Header with yellow frame */}
-            <header className="bg-yellow-400 shadow-lg">
-                <div className="container mx-auto px-4 py-6 text-center">
-                    <div className="inline-block border-4 border-yellow-600 rounded-lg px-8 py-4 bg-yellow-300 shadow-md">
-                        <h1 className="text-3xl font-bold text-gray-800">
-                            دليل الهاتف الداخلي
-                        </h1>
-                        <h2 className="text-2xl text-gray-700 mt-2">
-                            شركة البريقة للنفط
-                        </h2>
-                        <div className="flex justify-center mt-3">
-                            <img
-                                src="/logo.png"
-                                alt="شعار الشركة"
-                                className="h-16"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </header>
+            <Header />
 
             <main className="container mx-auto px-4 py-8">
                 {/* Search and Filters Section */}
@@ -378,72 +360,85 @@ const PhoneDirectory = () => {
                                 </tr>
                             </thead>
                             <tbody>
-  {filteredEmployees.length > 0 ? (
-    filteredEmployees.map(employee => (
-      <tr
-        key={employee.id}
-        className="border-b border-gray-200 hover:bg-blue-50 transition duration-150"
-      >
-        {/* إزالة خلية الصورة */}
-        <td className="px-4 py-3 font-medium">
-          {employee.name}
-        </td>
-        <td className="px-4 py-3">
-          <span
-            className={`px-2 py-1 rounded-full text-xs ${
-              employee.role === "مدير"
-                ? "bg-purple-100 text-purple-800"
-                : employee.role === "مهندس"
-                ? "bg-blue-100 text-blue-800"
-                : employee.role === "فني"
-                ? "bg-green-100 text-green-800"
-                : "bg-gray-100 text-gray-800"
-            }`}
-          >
-            {employee.role}
-          </span>
-        </td>
-        <td className="px-4 py-3">
-          {employee.department}
-        </td>
-        <td className="px-4 py-3">
-          {employee.internalNumber !== "لا يوجد" ? (
-            <a
-              href={`tel:${employee.internalNumber}`}
-              className="text-blue-600 hover:underline"
-            >
-              {employee.internalNumber}
-            </a>
-          ) : (
-            <span className="text-gray-400">لا يوجد</span>
-          )}
-        </td>
-        <td className="px-4 py-3">
-          {employee.directNumber !== "لا يوجد" ? (
-            <a
-              href={`tel:${employee.directNumber}`}
-              className="text-blue-600 hover:underline"
-            >
-              {employee.directNumber}
-            </a>
-          ) : (
-            <span className="text-gray-400">لا يوجد</span>
-          )}
-        </td>
-        <td className="px-4 py-3">
-          {employee.workLocation}
-        </td>
-        {/* إزالة خلية التفاصيل */}
-      </tr>
-    ))
-  ) : (
-    <tr>
-      <td colSpan="6" className="px-6 py-8 text-center text-gray-500">
-        لا توجد نتائج مطابقة للبحث
-      </td>
-    </tr>
-  )}
-</tbody>
+                                {filteredEmployees.length > 0 ? (
+                                    filteredEmployees.map(employee => (
+                                        <tr
+                                            key={employee.id}
+                                            className="border-b border-gray-200 hover:bg-blue-50 transition duration-150"
+                                        >
+                                            {/* إزالة خلية الصورة */}
+                                            <td className="px-4 py-3 font-medium">
+                                                {employee.name}
+                                            </td>
+                                            <td className="px-4 py-3">
+                                                <span
+                                                    className={`px-2 py-1 rounded-full text-xs ${
+                                                        employee.role === "مدير"
+                                                            ? "bg-purple-100 text-purple-800"
+                                                            : employee.role ===
+                                                              "مهندس"
+                                                            ? "bg-blue-100 text-blue-800"
+                                                            : employee.role ===
+                                                              "فني"
+                                                            ? "bg-green-100 text-green-800"
+                                                            : "bg-gray-100 text-gray-800"
+                                                    }`}
+                                                >
+                                                    {employee.role}
+                                                </span>
+                                            </td>
+                                            <td className="px-4 py-3">
+                                                {employee.department}
+                                            </td>
+                                            <td className="px-4 py-3">
+                                                {employee.internalNumber !==
+                                                "لا يوجد" ? (
+                                                    <a
+                                                        href={`tel:${employee.internalNumber}`}
+                                                        className="text-blue-600 hover:underline"
+                                                    >
+                                                        {
+                                                            employee.internalNumber
+                                                        }
+                                                    </a>
+                                                ) : (
+                                                    <span className="text-gray-400">
+                                                        لا يوجد
+                                                    </span>
+                                                )}
+                                            </td>
+                                            <td className="px-4 py-3">
+                                                {employee.directNumber !==
+                                                "لا يوجد" ? (
+                                                    <a
+                                                        href={`tel:${employee.directNumber}`}
+                                                        className="text-blue-600 hover:underline"
+                                                    >
+                                                        {employee.directNumber}
+                                                    </a>
+                                                ) : (
+                                                    <span className="text-gray-400">
+                                                        لا يوجد
+                                                    </span>
+                                                )}
+                                            </td>
+                                            <td className="px-4 py-3">
+                                                {employee.workLocation}
+                                            </td>
+                                            {/* إزالة خلية التفاصيل */}
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td
+                                            colSpan="6"
+                                            className="px-6 py-8 text-center text-gray-500"
+                                        >
+                                            لا توجد نتائج مطابقة للبحث
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -602,17 +597,7 @@ const PhoneDirectory = () => {
                 </div>
             )}
 
-            <footer className="bg-gray-800 text-white py-6 mt-12">
-                <div className="container mx-auto px-4 text-center">
-                    <p>
-                        © {new Date().getFullYear()} دليل الهاتف الداخلي - شركة
-                        البريقة للنفط
-                    </p>
-                    <p className="mt-2 text-gray-400 text-sm">
-                        جميع الحقوق محفوظة
-                    </p>
-                </div>
-            </footer>
+            <Footer />
         </div>
     );
 };
