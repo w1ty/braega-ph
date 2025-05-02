@@ -1,0 +1,76 @@
+import React from "react";
+
+const EmployeeList = ({ employees, filters, searchText, setSelectedEmployee }) => {
+    const filteredEmployees = employees.filter((employee) => {
+        return (
+            employee.name.includes(searchText) &&
+            (filters.location === "" || employee.workLocation === filters.location) &&
+            (filters.role === "" || employee.role === filters.role) &&
+            (filters.department === "" || employee.department === filters.department)
+        );
+    });
+
+    return (
+        <div className="bg-white rounded-xl shadow-md overflow-hidden">
+            <div className="overflow-x-auto">
+                <table className="min-w-full text-right border-collapse">
+                    <thead className="bg-blue-700 text-white">
+                        <tr>
+                            <th className="px-6 py-4">الاسم</th>
+                            <th className="px-6 py-4">الصفة الوظيفية</th>
+                            <th className="px-6 py-4">الإدارة</th>
+                            <th className="px-6 py-4">الرقم الداخلي</th>
+                            <th className="px-6 py-4">الرقم المباشر</th>
+                            <th className="px-6 py-4">رقم VoIP</th>
+                            <th className="px-6 py-4">موقع العمل</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredEmployees.length > 0 ? (
+                            filteredEmployees.map((employee) => (
+                                <tr
+                                    key={employee.id}
+                                    className="border-b hover:bg-blue-50 transition duration-150"
+                                    onClick={() => setSelectedEmployee(employee)}
+                                >
+                                    <td className="px-6 py-4 font-medium border-t">{employee.name}</td>
+                                    <td className="px-6 py-4 border-t">
+                                        <span
+                                            className={`px-2 py-1 rounded-full text-xs ${
+                                                employee.role === "مدير"
+                                                    ? "bg-purple-100 text-purple-800"
+                                                    : employee.role === "مهندس"
+                                                    ? "bg-blue-100 text-blue-800"
+                                                    : employee.role === "فني"
+                                                    ? "bg-green-100 text-green-800"
+                                                    : "bg-gray-100 text-gray-800"
+                                            }`}
+                                        >
+                                            {employee.role}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4 border-t">{employee.department}</td>
+                                    <td className="px-6 py-4 border-t">{employee.internalNumber}</td>
+                                    <td className="px-6 py-4 border-t">{employee.directNumber}</td>
+                                    <td className="px-6 py-4 border-t">{employee.voipNumber}</td>
+                                    <td className="px-6 py-4 border-t">{employee.workLocation}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td
+                                    colSpan="7"
+                                    className="text-center py-6 text-gray-500 border-t"
+                                >
+                                    لا توجد نتائج مطابقة
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+};
+
+export default EmployeeList;

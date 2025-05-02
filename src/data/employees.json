@@ -1,0 +1,167 @@
+[
+  {
+    "id": 1,
+    "name": "عبدالوهاب بوكمار",
+    "role": "مشغل أجهزة رابع",
+    "department": "إدارة الحاسب الآلي",
+    "internalNumber": "31100",
+    "directNumber": "0612233000",
+    "reefNumber": "0612288111",
+    "voipNumber": "35101",
+    "workLocation": "البركة عمارة 551"
+  },
+  {
+    "id": 2,
+    "name": "أحمد جعفر",
+    "role": "رئيس الشبكات",
+    "department": "إدارة الحاسب الآلي",
+    "internalNumber": "31101",
+    "directNumber": "0612233001",
+    "reefNumber": "0612288222",
+    "voipNumber": "35102",
+    "workLocation": "البركة عمارة 551"
+  },
+  {
+    "id": 3,
+    "name": "سالم الورفلي",
+    "role": "مهندس نظم أول",
+    "department": "إدارة التشغيل",
+    "internalNumber": "31102",
+    "directNumber": "0612233002",
+    "reefNumber": "0612288333",
+    "voipNumber": "35103",
+    "workLocation": "مبنى التقنية - الطابق الثاني"
+  },
+  {
+    "id": 4,
+    "name": "فاطمة الزهراء العوامي",
+    "role": "محللة نظم",
+    "department": "وحدة التحول الرقمي",
+    "internalNumber": "31103",
+    "directNumber": "0612233003",
+    "reefNumber": "0612288444",
+    "voipNumber": "35104",
+    "workLocation": "مكتب رقم 12 - مجمع الإدارة"
+  },
+  {
+    "id": 5,
+    "name": "مصطفى بن غربية",
+    "role": "مساعد فني شبكات",
+    "department": "قسم الشبكات والدعم",
+    "internalNumber": "31104",
+    "directNumber": "0612233004",
+    "reefNumber": "0612288555",
+    "voipNumber": "35105",
+    "workLocation": "المبنى الرئيسي - قاعة 3"
+  },
+  {
+    "id": 6,
+    "name": "حنان المهدوي",
+    "role": "مبرمجة قواعد بيانات",
+    "department": "إدارة النظم والمعلومات",
+    "internalNumber": "31105",
+    "directNumber": "0612233005",
+    "reefNumber": "0612288666",
+    "voipNumber": "35106",
+    "workLocation": "البركة عمارة 552"
+  },
+  {
+    "id": 7,
+    "name": "زياد الأشهب",
+    "role": "مدير المشاريع التقنية",
+    "department": "إدارة المشاريع والتحول",
+    "internalNumber": "31106",
+    "directNumber": "0612233006",
+    "reefNumber": "0612288777",
+    "voipNumber": "35107",
+    "workLocation": "مركز القيادة الإلكترونية"
+  },
+  {
+    "id": 8,
+    "name": "سندس العجيلي",
+    "role": "مهندسة دعم فني",
+    "department": "قسم الدعم والمساندة",
+    "internalNumber": "31107",
+    "directNumber": "0612233007",
+    "reefNumber": "0612288888",
+    "voipNumber": "35108",
+    "workLocation": "البركة عمارة 553"
+  },
+  {
+    "id": 9,
+    "name": "أنور العكروت",
+    "role": "مراقب أنظمة",
+    "department": "وحدة المراقبة والتحكم",
+    "internalNumber": "31108",
+    "directNumber": "0612233008",
+    "reefNumber": "0612288999",
+    "voipNumber": "35109",
+    "workLocation": "محطة البيانات - الغرفة C"
+  },
+  {
+    "id": 10,
+    "name": "بشرى الغرياني",
+    "role": "أخصائية أمن معلومات",
+    "department": "إدارة أمن التقنية",
+    "internalNumber": "31109",
+    "directNumber": "0612233009",
+    "reefNumber": "0612289000",
+    "voipNumber": "35110",
+    "workLocation": "البركة عمارة الأمن الرقمي"
+  },
+  {
+    "id": 11,
+    "name": "مؤيد الشيباني",
+    "role": "فني اتصالات",
+    "department": "قسم الاتصالات الرقمية",
+    "internalNumber": "31110",
+    "directNumber": "0612233010",
+    "reefNumber": "0612289111",
+    "voipNumber": "35111",
+    "workLocation": "وحدة الاتصالات - الطابق الأول"
+  },
+  {
+    "id": 12,
+    "name": "هالة بن إسماعيل",
+    "role": "محللة نظم",
+    "department": "وحدة التطبيقات المؤسسية",
+    "internalNumber": "31111",
+    "directNumber": "0612233011",
+    "reefNumber": "0612289222",
+    "voipNumber": "35112",
+    "workLocation": "مجمع البرمجة"
+  },
+  {
+    "id": 13,
+    "name": "أمجد الحوات",
+    "role": "منسق مشاريع تقنية",
+    "department": "إدارة المشاريع التقنية",
+    "internalNumber": "31112",
+    "directNumber": "0612233012",
+    "reefNumber": "0612289333",
+    "voipNumber": "35113",
+    "workLocation": "مركز التخطيط التقني"
+  },
+  {
+    "id": 14,
+    "name": "إيمان الدرسي",
+    "role": "مهندسة نظم تشغيل",
+    "department": "وحدة تشغيل الخوادم",
+    "internalNumber": "31113",
+    "directNumber": "0612233013",
+    "reefNumber": "0612289444",
+    "voipNumber": "35114",
+    "workLocation": "مركز البيانات المركزي"
+  },
+  {
+    "id": 15,
+    "name": "عبدالله الشاعري",
+    "role": "رئيس قسم التطبيقات",
+    "department": "إدارة البرمجيات المؤسسية",
+    "internalNumber": "31114",
+    "directNumber": "0612233014",
+    "reefNumber": "0612289555",
+    "voipNumber": "35115",
+    "workLocation": "البركة - عمارة الأنظمة"
+  }
+]
