@@ -1,7 +1,13 @@
 export default function Header() {
     return (
-        <header className="bg-yellow-400 shadow-lg">
-            <div className="container mx-auto px-4 py-6 text-center">
+        <header className="bg-[#EBEBEB] shadow-lg">
+            <div className="container mx-auto px-4 py-6 text-center relative">
+                <div className="absolute left-0 top-0 px-2 py-1 text-gray-800 text-sm font-bold">
+                    ادارة الحاسب الالي و لبلتصلات
+                </div>
+                <div className="absolute right-0 top-0 px-2 py-1 text-gray-800 text-sm font-bold">
+                    منسقية الاتصلات
+                </div>
                 <div className="inline-block border-4 border-yellow-600 rounded-lg px-8 py-4 bg-yellow-300 shadow-md">
                     <h1 className="text-3xl font-bold text-gray-800">
                         دليل الهاتف الداخلي

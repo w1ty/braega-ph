@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 const Filters = ({ filters, setFilters }) => {
     const locations = [
@@ -26,17 +26,32 @@ const Filters = ({ filters, setFilters }) => {
         "إدارة التشغيل"
     ];
 
+    const sectionsByDepartment = {
+        "إدارة الحاسب الآلي": ["الشبكات", "البرمجيات", "الدعم الفني"],
+        "إدارة الاتصالات": ["الصيانة", "التشغيل"],
+        "إدارة التشغيل": ["المراقبة", "الإشراف"]
+    };
+
+    const [sections, setSections] = useState([]);
+
     const handleFilterChange = e => {
         const { name, value } = e.target;
         setFilters(prev => ({ ...prev, [name]: value }));
+
+        if (name === "department") {
+            setSections(sectionsByDepartment[value] || []);
+            setFilters(prev => ({ ...prev, section: "" })); // Reset section when department changes
+        }
     };
 
     const resetFilters = () => {
         setFilters({
             location: "",
             role: "",
-            department: ""
+            department: "",
+            section: ""
         });
+        setSections([]);
     };
 
     return (
@@ -102,6 +117,26 @@ const Filters = ({ filters, setFilters }) => {
                     ))}
                 </select>
             </div>
+
+            {/* Section Filter */}
+            {sections.length > 0 && (
+                <div className="flex-1 min-w-[180px]">
+                    <label className="block text-gray-700 mb-2">القسم</label>
+                    <select
+                        name="section"
+                        value={filters.section || ""}
+                        onChange={handleFilterChange}
+                        className="w-full border border-blue-500 rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    >
+                        <option value="">كل الأقسام</option>
+                        {sections.map((section, index) => (
+                            <option key={index} value={section}>
+                                {section}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            )}
 
             {/* Reset Button */}
             <div className="min-w-[150px]">
