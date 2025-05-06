@@ -8,7 +8,7 @@ const Filters = ({ filters, setFilters }) => {
         "أعضاء اللجنة",
         "الميناء",
         "المطار",
-        "المستودع",
+        "المستودع"
     ];
     const roles = [
         "كل الصفات",
@@ -17,25 +17,25 @@ const Filters = ({ filters, setFilters }) => {
         "فني",
         "إداري",
         "مساعد إداري",
-        "محاسب",
+        "محاسب"
     ];
     const departments = [
         "كل الإدارات",
         "إدارة الحاسب الآلي",
         "إدارة الاتصالات",
-        "إدارة التشغيل",
+        "إدارة التشغيل"
     ];
 
-    const handleFilterChange = (e) => {
+    const handleFilterChange = e => {
         const { name, value } = e.target;
-        setFilters((prev) => ({ ...prev, [name]: value }));
+        setFilters(prev => ({ ...prev, [name]: value }));
     };
 
     const resetFilters = () => {
         setFilters({
             location: "",
             role: "",
-            department: "",
+            department: ""
         });
     };
 
@@ -51,7 +51,10 @@ const Filters = ({ filters, setFilters }) => {
                     className="w-full border border-blue-500 rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
                 >
                     {locations.map((loc, index) => (
-                        <option key={index} value={loc === "كل المواقع" ? "" : loc}>
+                        <option
+                            key={index}
+                            value={loc === "كل المواقع" ? "" : loc}
+                        >
                             {loc}
                         </option>
                     ))}
@@ -60,7 +63,9 @@ const Filters = ({ filters, setFilters }) => {
 
             {/* Role Filter */}
             <div className="flex-1 min-w-[180px]">
-                <label className="block text-gray-700 mb-2">الصفة الوظيفية</label>
+                <label className="block text-gray-700 mb-2">
+                    الصفة الوظيفية
+                </label>
                 <select
                     name="role"
                     value={filters.role}
@@ -68,7 +73,10 @@ const Filters = ({ filters, setFilters }) => {
                     className="w-full border border-blue-500 rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
                 >
                     {roles.map((role, index) => (
-                        <option key={index} value={role === "كل الصفات" ? "" : role}>
+                        <option
+                            key={index}
+                            value={role === "كل الصفات" ? "" : role}
+                        >
                             {role}
                         </option>
                     ))}
@@ -85,7 +93,10 @@ const Filters = ({ filters, setFilters }) => {
                     className="w-full border border-blue-500 rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
                 >
                     {departments.map((dept, index) => (
-                        <option key={index} value={dept === "كل الإدارات" ? "" : dept}>
+                        <option
+                            key={index}
+                            value={dept === "كل الإدارات" ? "" : dept}
+                        >
                             {dept}
                         </option>
                     ))}
