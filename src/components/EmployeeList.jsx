@@ -1,6 +1,42 @@
 import React from "react";
 
 const EmployeeList = ({ employees, filters, searchText, setSelectedEmployee }) => {
+    const roleMap = {
+        Tech: "فني",
+        Mgr: "مدير",
+        Eng: "مهندس",
+        Admin: "إداري",
+        AdminAsst: "مساعد إداري"
+    };
+
+    const departmentMap = {
+        "IT/Net": "الحاسب الآلي والشبكات",
+        "IT/Soft": "الحاسب الآلي والبرمجيات",
+        "Ops/Mon": "التشغيل والمراقبة",
+        "IT/Sup": "الحاسب الآلي والدعم الفني",
+        "Comm/Maint": "الاتصالات والصيانة",
+        "Ops/Sup": "التشغيل والإشراف",
+        "Comm/Ops": "الاتصالات والعمليات"
+    };
+
+    const locationMap = {
+        HO: "المقر الرئيسي",
+        P: "الميناء",
+        CM: "أعضاء اللجنة",
+        RM: "رأس المنقار",
+        W: "المخزن",
+        A: "المطار"
+    };
+
+    const sectionMap = {
+        Net: "الشبكات",
+        Soft: "البرمجيات",
+        Sup: "الدعم الفني",
+        Maint: "الصيانة",
+        Ops: "العمليات",
+        Mon: "المراقبة"
+    };
+
     const filteredEmployees = employees.filter((employee) => {
         const searchLower = searchText.toLowerCase();
         return (
@@ -10,7 +46,8 @@ const EmployeeList = ({ employees, filters, searchText, setSelectedEmployee }) =
                 employee.voipNumber.includes(searchText)) &&
             (filters.location === "" || employee.workLocation === filters.location) &&
             (filters.role === "" || employee.role === filters.role) &&
-            (filters.department === "" || employee.department === filters.department)
+            (filters.department === "" || employee.department === filters.department) &&
+            (filters.section === "" || employee.section === filters.section)
         );
     });
 
@@ -22,7 +59,7 @@ const EmployeeList = ({ employees, filters, searchText, setSelectedEmployee }) =
                         <tr>
                             <th className="px-6 py-4">الاسم</th>
                             <th className="px-6 py-4">الصفة الوظيفية</th>
-                            <th className="px-6 py-4">الإدارة</th>
+                            <th className="px-6 py-4">الإدارة والقسم</th>
                             <th className="px-6 py-4">الرقم الداخلي</th>
                             <th className="px-6 py-4">الرقم المباشر</th>
                             <th className="px-6 py-4">رقم VoIP</th>
@@ -41,23 +78,23 @@ const EmployeeList = ({ employees, filters, searchText, setSelectedEmployee }) =
                                     <td className="px-6 py-4 border-t">
                                         <span
                                             className={`px-2 py-1 rounded-full text-xs ${
-                                                employee.role === "مدير"
+                                                employee.role === "Mgr"
                                                     ? "bg-purple-100 text-purple-800"
-                                                    : employee.role === "مهندس"
+                                                    : employee.role === "Eng"
                                                     ? "bg-blue-100 text-blue-800"
-                                                    : employee.role === "فني"
+                                                    : employee.role === "Tech"
                                                     ? "bg-green-100 text-green-800"
                                                     : "bg-gray-100 text-gray-800"
                                             }`}
                                         >
-                                            {employee.role}
+                                            {roleMap[employee.role]}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4 border-t">{employee.department}</td>
+                                    <td className="px-6 py-4 border-t">{departmentMap[employee.department]} و {sectionMap[employee.section]}</td>
                                     <td className="px-6 py-4 border-t">{employee.internalNumber}</td>
                                     <td className="px-6 py-4 border-t">{employee.directNumber}</td>
                                     <td className="px-6 py-4 border-t">{employee.voipNumber}</td>
-                                    <td className="px-6 py-4 border-t">{employee.workLocation}</td>
+                                    <td className="px-6 py-4 border-t">{locationMap[employee.workLocation]}</td>
                                 </tr>
                             ))
                         ) : (

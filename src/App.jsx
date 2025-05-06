@@ -13,6 +13,7 @@ const PhoneDirectory = () => {
         location: "",
         role: "",
         department: "",
+        section: "" // Added section to the filters state
     });
     const [selectedEmployee, setSelectedEmployee] = useState(null);
 

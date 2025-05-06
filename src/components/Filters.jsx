@@ -2,45 +2,56 @@ import React, { useState } from "react";
 
 const Filters = ({ filters, setFilters }) => {
     const locations = [
-        "كل المواقع",
-        "الإدارة العامة",
-        "رأس المنقار",
-        "أعضاء اللجنة",
-        "الميناء",
-        "المطار",
-        "المستودع"
+        { label: "كل المواقع", value: "" },
+        { label: "الإدارة العامة", value: "HO" },
+        { label: "رأس المنقار", value: "RM" },
+        { label: "أعضاء اللجنة", value: "CM" },
+        { label: "الميناء", value: "P" },
+        { label: "المطار", value: "A" },
+        { label: "المستودع", value: "W" }
     ];
+
     const roles = [
-        "كل الصفات",
-        "مدير",
-        "مهندس",
-        "فني",
-        "إداري",
-        "مساعد إداري",
-        "محاسب"
+        { label: "كل الصفات", value: "" },
+        { label: "مدير", value: "Mgr" },
+        { label: "مهندس", value: "Eng" },
+        { label: "فني", value: "Tech" },
+        { label: "إداري", value: "Admin" },
+        { label: "مساعد إداري", value: "AdminAsst" }
     ];
+
     const departments = [
-        "كل الإدارات",
-        "إدارة الحاسب الآلي",
-        "إدارة الاتصالات",
-        "إدارة التشغيل"
+        { label: "كل الإدارات", value: "" },
+        { label: "الحاسب الآلي", value: "IT" },
+        { label: "الاتصالات", value: "Comm" },
+        { label: "التشغيل", value: "Ops" }
     ];
 
     const sectionsByDepartment = {
-        "إدارة الحاسب الآلي": ["الشبكات", "البرمجيات", "الدعم الفني"],
-        "إدارة الاتصالات": ["الصيانة", "التشغيل"],
-        "إدارة التشغيل": ["المراقبة", "الإشراف"]
+        IT: [
+            { label: "الشبكات", value: "Net" },
+            { label: "البرمجيات", value: "Soft" },
+            { label: "الدعم الفني", value: "Sup" }
+        ],
+        Comm: [
+            { label: "الصيانة", value: "Maint" },
+            { label: "العمليات", value: "Ops" }
+        ],
+        Ops: [
+            { label: "المراقبة", value: "Mon" },
+            { label: "الإشراف", value: "Sup" }
+        ]
     };
 
     const [sections, setSections] = useState([]);
 
-    const handleFilterChange = e => {
+    const handleFilterChange = (e) => {
         const { name, value } = e.target;
-        setFilters(prev => ({ ...prev, [name]: value }));
+        setFilters((prev) => ({ ...prev, [name]: value }));
 
         if (name === "department") {
-            setSections(sectionsByDepartment[value] || []);
-            setFilters(prev => ({ ...prev, section: "" })); // Reset section when department changes
+            setSections(value === "" ? [] : [{ label: "كل الأقسام", value: "" }, ...sectionsByDepartment[value]]);
+            setFilters((prev) => ({ ...prev, section: "" })); // Reset section when department changes
         }
     };
 
@@ -57,85 +68,41 @@ const Filters = ({ filters, setFilters }) => {
     return (
         <div className="flex flex-wrap gap-4 items-end">
             {/* Location Filter */}
-            <div className="flex-1 min-w-[180px]">
-                <label className="block text-gray-700 mb-2">موقع العمل</label>
-                <select
-                    name="location"
-                    value={filters.location}
-                    onChange={handleFilterChange}
-                    className="w-full border border-blue-500 rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-                >
-                    {locations.map((loc, index) => (
-                        <option
-                            key={index}
-                            value={loc === "كل المواقع" ? "" : loc}
-                        >
-                            {loc}
-                        </option>
-                    ))}
-                </select>
-            </div>
+            <FilterDropdown
+                label="موقع العمل"
+                name="location"
+                options={locations}
+                value={filters.location}
+                onChange={handleFilterChange}
+            />
 
             {/* Role Filter */}
-            <div className="flex-1 min-w-[180px]">
-                <label className="block text-gray-700 mb-2">
-                    الصفة الوظيفية
-                </label>
-                <select
-                    name="role"
-                    value={filters.role}
-                    onChange={handleFilterChange}
-                    className="w-full border border-blue-500 rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-                >
-                    {roles.map((role, index) => (
-                        <option
-                            key={index}
-                            value={role === "كل الصفات" ? "" : role}
-                        >
-                            {role}
-                        </option>
-                    ))}
-                </select>
-            </div>
+            <FilterDropdown
+                label="الصفة الوظيفية"
+                name="role"
+                options={roles}
+                value={filters.role}
+                onChange={handleFilterChange}
+            />
 
             {/* Department Filter */}
-            <div className="flex-1 min-w-[180px]">
-                <label className="block text-gray-700 mb-2">الإدارة</label>
-                <select
-                    name="department"
-                    value={filters.department}
-                    onChange={handleFilterChange}
-                    className="w-full border border-blue-500 rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-                >
-                    {departments.map((dept, index) => (
-                        <option
-                            key={index}
-                            value={dept === "كل الإدارات" ? "" : dept}
-                        >
-                            {dept}
-                        </option>
-                    ))}
-                </select>
-            </div>
+            <FilterDropdown
+                label="الإدارة"
+                name="department"
+                options={departments}
+                value={filters.department}
+                onChange={handleFilterChange}
+            />
 
             {/* Section Filter */}
             {sections.length > 0 && (
-                <div className="flex-1 min-w-[180px]">
-                    <label className="block text-gray-700 mb-2">القسم</label>
-                    <select
-                        name="section"
-                        value={filters.section || ""}
-                        onChange={handleFilterChange}
-                        className="w-full border border-blue-500 rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    >
-                        <option value="">كل الأقسام</option>
-                        {sections.map((section, index) => (
-                            <option key={index} value={section}>
-                                {section}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+                <FilterDropdown
+                    label="القسم"
+                    name="section"
+                    options={sections}
+                    value={filters.section}
+                    onChange={handleFilterChange}
+                />
             )}
 
             {/* Reset Button */}
@@ -150,5 +117,23 @@ const Filters = ({ filters, setFilters }) => {
         </div>
     );
 };
+
+const FilterDropdown = ({ label, name, options, value, onChange }) => (
+    <div className="flex-1 min-w-[180px]">
+        <label className="block text-gray-700 mb-2">{label}</label>
+        <select
+            name={name}
+            value={value}
+            onChange={onChange}
+            className="w-full border border-blue-500 rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+        >
+            {options.map((option, index) => (
+                <option key={index} value={option.value}>
+                    {option.label}
+                </option>
+            ))}
+        </select>
+    </div>
+);
 
 export default Filters;
