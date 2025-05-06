@@ -2,8 +2,12 @@ import React from "react";
 
 const EmployeeList = ({ employees, filters, searchText, setSelectedEmployee }) => {
     const filteredEmployees = employees.filter((employee) => {
+        const searchLower = searchText.toLowerCase();
         return (
-            employee.name.includes(searchText) &&
+            (employee.name.toLowerCase().includes(searchLower) ||
+                employee.internalNumber.includes(searchText) ||
+                employee.directNumber.includes(searchText) ||
+                employee.voipNumber.includes(searchText)) &&
             (filters.location === "" || employee.workLocation === filters.location) &&
             (filters.role === "" || employee.role === filters.role) &&
             (filters.department === "" || employee.department === filters.department)
