@@ -52,18 +52,18 @@ const EmployeeList = ({ employees, filters, searchText, setSelectedEmployee }) =
     });
 
     return (
-        <div className="bg-white rounded-xl shadow-md overflow-hidden">
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
             <div className="overflow-x-auto">
                 <table className="min-w-full text-right border-collapse">
-                    <thead className="bg-blue-700 text-white">
+                    <thead className="bg-blue-800 text-white">
                         <tr>
-                            <th className="px-6 py-4">الاسم</th>
-                            <th className="px-6 py-4">الصفة الوظيفية</th>
-                            <th className="px-6 py-4">الإدارة والقسم</th>
-                            <th className="px-6 py-4">الرقم الداخلي</th>
-                            <th className="px-6 py-4">الرقم المباشر</th>
-                            <th className="px-6 py-4">رقم VoIP</th>
-                            <th className="px-6 py-4">موقع العمل</th>
+                            <th className="px-6 py-4 text-sm font-semibold">الاسم</th>
+                            <th className="px-6 py-4 text-sm font-semibold">الصفة الوظيفية</th>
+                            <th className="px-6 py-4 text-sm font-semibold">الإدارة والقسم</th>
+                            <th className="px-6 py-4 text-sm font-semibold">الرقم الداخلي</th>
+                            <th className="px-6 py-4 text-sm font-semibold">الرقم المباشر</th>
+                            <th className="px-6 py-4 text-sm font-semibold">رقم VoIP</th>
+                            <th className="px-6 py-4 text-sm font-semibold">موقع العمل</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -71,30 +71,30 @@ const EmployeeList = ({ employees, filters, searchText, setSelectedEmployee }) =
                             filteredEmployees.map((employee) => (
                                 <tr
                                     key={employee.id}
-                                    className="border-b hover:bg-blue-50 transition duration-150"
+                                    className="border-b hover:bg-blue-100 transition duration-200 ease-in-out cursor-pointer"
                                     onClick={() => setSelectedEmployee(employee)}
                                 >
-                                    <td className="px-6 py-4 font-medium border-t">{employee.name}</td>
+                                    <td className="px-6 py-4 font-medium border-t text-gray-700">{employee.name}</td>
                                     <td className="px-6 py-4 border-t">
                                         <span
-                                            className={`px-2 py-1 rounded-full text-xs ${
+                                            className={`px-3 py-1 rounded-full text-xs font-medium ${
                                                 employee.role === "Mgr"
-                                                    ? "bg-purple-100 text-purple-800"
+                                                    ? "bg-purple-200 text-purple-800"
                                                     : employee.role === "Eng"
-                                                    ? "bg-blue-100 text-blue-800"
+                                                    ? "bg-blue-200 text-blue-800"
                                                     : employee.role === "Tech"
-                                                    ? "bg-green-100 text-green-800"
-                                                    : "bg-gray-100 text-gray-800"
+                                                    ? "bg-green-200 text-green-800"
+                                                    : "bg-gray-200 text-gray-800"
                                             }`}
                                         >
                                             {roleMap[employee.role]}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4 border-t">{departmentMap[employee.department]} و {sectionMap[employee.section]}</td>
-                                    <td className="px-6 py-4 border-t">{employee.internalNumber}</td>
-                                    <td className="px-6 py-4 border-t">{employee.directNumber}</td>
-                                    <td className="px-6 py-4 border-t">{employee.voipNumber}</td>
-                                    <td className="px-6 py-4 border-t">{locationMap[employee.workLocation]}</td>
+                                    <td className="px-6 py-4 border-t text-gray-600">{departmentMap[employee.department]} و {sectionMap[employee.section]}</td>
+                                    <td className="px-6 py-4 border-t text-gray-600">{employee.internalNumber}</td>
+                                    <td className="px-6 py-4 border-t text-gray-600">{employee.directNumber}</td>
+                                    <td className="px-6 py-4 border-t text-gray-600">{employee.voipNumber}</td>
+                                    <td className="px-6 py-4 border-t text-gray-600">{locationMap[employee.workLocation]}</td>
                                 </tr>
                             ))
                         ) : (
