@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import SearchBar from "./components/SearchBar";
 import Filters from "./components/Filters";
 import EmployeeList from "./components/EmployeeList";
 import EmployeeDetailsModal from "./components/EmployeeDetailsModal";
-import employees from "./data/employees.json"; // Import employee data from JSON file
 
-const PhoneDirectory = () => {
+const PhoneDirectory = ({ userRole }) => {
     const [searchText, setSearchText] = useState("");
     const [filters, setFilters] = useState({
         location: "",
@@ -16,6 +16,20 @@ const PhoneDirectory = () => {
         section: "" // Added section to the filters state
     });
     const [selectedEmployee, setSelectedEmployee] = useState(null);
+    const [employees, setEmployees] = useState([]);
+
+    useEffect(() => {
+        const fetchEmployees = async () => {
+            try {
+                const response = await axios.get("http://localhost:3000/api/employees");
+                setEmployees(response.data);
+            } catch (error) {
+                console.error("Error fetching employees:", error);
+            }
+        };
+
+        fetchEmployees();
+    }, []);
 
     return (
         <div className="font-['Cairo'] min-h-screen bg-gray-100">
@@ -30,6 +44,7 @@ const PhoneDirectory = () => {
                     filters={filters}
                     searchText={searchText}
                     setSelectedEmployee={setSelectedEmployee}
+                    userRole={userRole} // Pass userRole to EmployeeList
                 />
                 {selectedEmployee && (
                     <EmployeeDetailsModal

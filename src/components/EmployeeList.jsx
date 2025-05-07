@@ -1,6 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-const EmployeeList = ({ employees, filters, searchText, setSelectedEmployee }) => {
+const EmployeeList = ({ userRole, filters, searchText, setSelectedEmployee }) => {
+    const [employees, setEmployees] = useState([]);
+
+    useEffect(() => {
+        const fetchEmployees = async () => {
+            try {
+                const response = await axios.get("http://localhost:3000/api/employees");
+                setEmployees(response.data);
+            } catch (error) {
+                console.error("Error fetching employees:", error);
+            }
+        };
+
+        fetchEmployees();
+    }, []);
+
     const roleMap = {
         Tech: "فني",
         Mgr: "مدير",
@@ -37,6 +53,22 @@ const EmployeeList = ({ employees, filters, searchText, setSelectedEmployee }) =
         Mon: "المراقبة"
     };
 
+    const handleDelete = (id) => {
+        const updatedEmployees = employees.filter((employee) => employee.id !== id);
+        setEmployees(updatedEmployees);
+    };
+
+    const handleUpdate = (id, updatedData) => {
+        const updatedEmployees = employees.map((employee) =>
+            employee.id === id ? { ...employee, ...updatedData } : employee
+        );
+        setEmployees(updatedEmployees);
+    };
+
+    const handleAdd = (newEmployee) => {
+        setEmployees([...employees, { id: Date.now(), ...newEmployee }]);
+    };
+
     const filteredEmployees = employees.filter((employee) => {
         const searchLower = searchText.toLowerCase();
         return (
@@ -64,6 +96,9 @@ const EmployeeList = ({ employees, filters, searchText, setSelectedEmployee }) =
                             <th className="px-6 py-4 text-sm font-semibold">الرقم المباشر</th>
                             <th className="px-6 py-4 text-sm font-semibold">رقم VoIP</th>
                             <th className="px-6 py-4 text-sm font-semibold">موقع العمل</th>
+                            {userRole === "admin" && (
+                                <th className="px-6 py-4 text-sm font-semibold">الإجراءات</th>
+                            )}
                         </tr>
                     </thead>
                     <tbody>
@@ -95,12 +130,28 @@ const EmployeeList = ({ employees, filters, searchText, setSelectedEmployee }) =
                                     <td className="px-6 py-4 border-t text-gray-600">{employee.directNumber}</td>
                                     <td className="px-6 py-4 border-t text-gray-600">{employee.voipNumber}</td>
                                     <td className="px-6 py-4 border-t text-gray-600">{locationMap[employee.workLocation]}</td>
+                                    {userRole === "admin" && (
+                                        <td className="px-6 py-4 border-t text-gray-600">
+                                            <button
+                                                onClick={() => handleDelete(employee.id)}
+                                                className="bg-red-500 text-white px-2 py-1 rounded mr-2"
+                                            >
+                                                حذف
+                                            </button>
+                                            <button
+                                                onClick={() => handleUpdate(employee.id, { name: "اسم محدث" })}
+                                                className="bg-blue-500 text-white px-2 py-1 rounded"
+                                            >
+                                                تحديث
+                                            </button>
+                                        </td>
+                                    )}
                                 </tr>
                             ))
                         ) : (
                             <tr>
                                 <td
-                                    colSpan="7"
+                                    colSpan={userRole === "admin" ? "8" : "7"}
                                     className="text-center py-6 text-gray-500 border-t"
                                 >
                                     لا توجد نتائج مطابقة
@@ -110,6 +161,14 @@ const EmployeeList = ({ employees, filters, searchText, setSelectedEmployee }) =
                     </tbody>
                 </table>
             </div>
+            {userRole === "admin" && (
+                <button
+                    onClick={() => handleAdd({ name: "موظف جديد", role: "دور جديد", department: "إدارة جديدة" })}
+                    className="bg-green-500 text-white px-4 py-2 rounded mt-4"
+                >
+                    إضافة موظف
+                </button>
+            )}
         </div>
     );
 };
