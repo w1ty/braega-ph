@@ -8,8 +8,8 @@ const LoginPage = ({ setUserRole }) => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/api/logins');
-      const user = response.data.logins.find(
+      const { data } = await axios.get('http://localhost:3000/api/logins');
+      const user = data.logins.find(
         (login) => login.employeeNumber === employeeNumber && login.password === password
       );
 
@@ -31,31 +31,42 @@ const LoginPage = ({ setUserRole }) => {
           <img src="/public/logo.png" alt="Logo" className="h-16" />
         </div>
         <h1 className="text-2xl font-bold text-center mb-6">Login</h1>
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-2">الرقم الوظيفي:</label>
-          <input
-            type="text"
-            value={employeeNumber}
-            onChange={(e) => setEmployeeNumber(e.target.value)}
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-200"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-2">كلمة السر:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-200"
-          />
-        </div>
-        <button
-          onClick={handleLogin}
-          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleLogin();
+          }}
         >
-          Login
-        </button>
-        <p className="text-center text-red-500 mt-4">{message}</p>
+          <div className="mb-4">
+            <label htmlFor="employee-number" className="block text-gray-700 mb-2">الرقم الوظيفي:</label>
+            <input
+              id="employee-number"
+              type="text"
+              value={employeeNumber}
+              onChange={(e) => setEmployeeNumber(e.target.value)}
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-200"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="password" className="block text-gray-700 mb-2">كلمة السر:</label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-200"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+          >
+            Login
+          </button>
+        </form>
+        <p className="text-center text-red-500 mt-4" role="alert">{message}</p>
       </div>
     </div>
   );
