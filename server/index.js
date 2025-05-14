@@ -85,23 +85,35 @@ app.get("/api/directory", (req, res) => {
 const { administration_id, department_id, location_id, job_title_id } =
 req.query;
 
-let query = "SELECT * FROM directory WHERE 1=1";  
+let query = `
+    SELECT d.*, 
+           l.name AS location_name, 
+           jt.title AS role_name, 
+           dep.name AS department_name, 
+           adm.name AS administration_name 
+    FROM directory d
+    LEFT JOIN locations l ON d.location_id = l.id
+    LEFT JOIN job_titles jt ON d.job_title_id = jt.id
+    LEFT JOIN departments dep ON d.department_id = dep.id
+    LEFT JOIN administrations adm ON dep.administration_id = adm.id
+    WHERE 1=1`;
+
 const params = [];  
 
 if (administration_id) {  
-    query += " AND administration_id = ?";  
+    query += " AND adm.id = ?";  
     params.push(administration_id);  
 }  
 if (department_id) {  
-    query += " AND department_id = ?";  
+    query += " AND dep.id = ?";  
     params.push(department_id);  
 }  
 if (location_id) {  
-    query += " AND location_id = ?";  
+    query += " AND l.id = ?";  
     params.push(location_id);  
 }  
 if (job_title_id) {  
-    query += " AND job_title_id = ?";  
+    query += " AND jt.id = ?";  
     params.push(job_title_id);  
 }  
 

@@ -3,9 +3,13 @@ import axios from "axios";
 
 const EmployeeList = ({ userRole, filters, searchText, setSelectedEmployee }) => {
     const [employees, setEmployees] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchEmployees = async () => {
+            setLoading(true);
+            setError(null);
             try {
                 const response = await axios.get("http://localhost:3000/api/directory", {
                     params: {
@@ -13,84 +17,109 @@ const EmployeeList = ({ userRole, filters, searchText, setSelectedEmployee }) =>
                         department_id: filters.department,
                         location_id: filters.location,
                         job_title_id: filters.role,
+                        search: searchText,
                     },
                 });
-                setEmployees(response.data);
+
+                const mappedEmployees = response.data.map((employee) => ({
+                    id: employee.id,
+                    name: employee.name || "غير معروف",
+                    role: employee.role_name || "غير معروف",
+                    department: employee.department_name || "غير معروف",
+                    internalNumber: employee.internal_number || "غير متوفر",
+                    directNumber: employee.external_number || "غير متوفر",
+                    voipNumber: employee.voip_number || "غير متوفر",
+                    workLocation: employee.location_name || "غير معروف",
+                    administration: employee.administration_name || "غير معروف",
+                }));
+
+                setEmployees(mappedEmployees);
             } catch (error) {
                 console.error("Error fetching employees:", error);
+                setError("فشل في تحميل الموظفين. يرجى المحاولة مرة أخرى لاحقًا.");
+            } finally {
+                setLoading(false);
             }
         };
 
         fetchEmployees();
-    }, [filters]);
+    }, [filters, searchText]);
 
     return (
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
             <div className="overflow-x-auto">
-                <table className="min-w-full text-right border-collapse">
-                    <thead className="bg-blue-800 text-white">
-                        <tr>
-                            <th className="px-6 py-4 text-sm font-semibold">Name</th>
-                            <th className="px-6 py-4 text-sm font-semibold">Role</th>
-                            <th className="px-6 py-4 text-sm font-semibold">Department</th>
-                            <th className="px-6 py-4 text-sm font-semibold">Internal Number</th>
-                            <th className="px-6 py-4 text-sm font-semibold">Direct Number</th>
-                            <th className="px-6 py-4 text-sm font-semibold">VoIP Number</th>
-                            <th className="px-6 py-4 text-sm font-semibold">Location</th>
-                            {userRole === "admin" && (
-                                <th className="px-6 py-4 text-sm font-semibold">Actions</th>
-                            )}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {employees.length > 0 ? (
-                            employees.map((employee) => (
-                                <tr
-                                    key={employee.id}
-                                    className="border-b hover:bg-blue-100 transition duration-200 ease-in-out cursor-pointer"
-                                    onClick={() => setSelectedEmployee(employee)}
-                                >
-                                    <td className="px-6 py-4 font-medium border-t text-gray-700">{employee.name}</td>
-                                    <td className="px-6 py-4 border-t">{employee.role}</td>
-                                    <td className="px-6 py-4 border-t">{employee.department}</td>
-                                    <td className="px-6 py-4 border-t">{employee.internalNumber || "N/A"}</td>
-                                    <td className="px-6 py-4 border-t">{employee.directNumber || "N/A"}</td>
-                                    <td className="px-6 py-4 border-t">{employee.voipNumber || "N/A"}</td>
-                                    <td className="px-6 py-4 border-t">{employee.workLocation || "N/A"}</td>
-                                    {userRole === "admin" && (
-                                        <td className="px-6 py-4 border-t">
-                                            <button
-                                                className="bg-red-500 text-white px-2 py-1 rounded mr-2"
-                                            >
-                                                Delete
-                                            </button>
-                                            <button
-                                                className="bg-blue-500 text-white px-2 py-1 rounded"
-                                            >
-                                                Update
-                                            </button>
-                                        </td>
-                                    )}
-                                </tr>
-                            ))
-                        ) : (
+                {loading ? (
+                    <p className="text-center py-4">جاري التحميل...</p>
+                ) : error ? (
+                    <p className="text-center text-red-500 py-4">{error}</p>
+                ) : (
+                    <table className="min-w-full text-right border-collapse">
+                        <thead className="bg-blue-800 text-white">
                             <tr>
-                                <td
-                                    colSpan={userRole === "admin" ? 8 : 7}
-                                    className="px-6 py-4 text-center text-gray-500"
-                                >
-                                    No employees found.
-                                </td>
+                                <th className="px-6 py-4 text-sm font-semibold">الاسم</th>
+                                <th className="px-6 py-4 text-sm font-semibold">الدور</th>
+                                <th className="px-6 py-4 text-sm font-semibold">القسم</th>
+                                <th className="px-6 py-4 text-sm font-semibold">الرقم الداخلي</th>
+                                <th className="px-6 py-4 text-sm font-semibold">الرقم المباشر</th>
+                                <th className="px-6 py-4 text-sm font-semibold">رقم VoIP</th>
+                                <th className="px-6 py-4 text-sm font-semibold">الموقع</th>
+                                <th className="px-6 py-4 text-sm font-semibold">الإدارة</th>
+                                {userRole === "admin" && (
+                                    <th className="px-6 py-4 text-sm font-semibold">الإجراءات</th>
+                                )}
                             </tr>
-                        )}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {employees.length > 0 ? (
+                                employees.map((employee) => (
+                                    <tr
+                                        key={employee.id}
+                                        className="border-b hover:bg-blue-100 transition duration-200 ease-in-out cursor-pointer"
+                                        onClick={() => setSelectedEmployee(employee)}
+                                    >
+                                        <td className="px-6 py-4 font-medium border-t text-gray-700">{employee.name}</td>
+                                        <td className="px-6 py-4 border-t">{employee.role}</td>
+                                        <td className="px-6 py-4 border-t">{employee.department}</td>
+                                        <td className="px-6 py-4 border-t">{employee.internalNumber}</td>
+                                        <td className="px-6 py-4 border-t">{employee.directNumber}</td>
+                                        <td className="px-6 py-4 border-t">{employee.voipNumber}</td>
+                                        <td className="px-6 py-4 border-t">{employee.workLocation}</td>
+                                        <td className="px-6 py-4 border-t">{employee.administration}</td>
+                                        {userRole === "admin" && (
+                                            <td className="px-6 py-4 border-t">
+                                                <button
+                                                    className="bg-red-500 text-white px-2 py-1 rounded mr-2"
+                                                >
+                                                    حذف
+                                                </button>
+                                                <button
+                                                    className="bg-blue-500 text-white px-2 py-1 rounded"
+                                                >
+                                                    تعديل
+                                                </button>
+                                            </td>
+                                        )}
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td
+                                        colSpan={userRole === "admin" ? 9 : 8}
+                                        className="px-6 py-4 text-center text-gray-500"
+                                    >
+                                        لم يتم العثور على موظفين.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                )}
             </div>
             {userRole === "admin" && (
                 <button
                     className="bg-green-500 text-white px-4 py-2 rounded mt-4"
                 >
-                    Add Employee
+                    إضافة موظف
                 </button>
             )}
         </div>

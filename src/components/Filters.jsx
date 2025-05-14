@@ -11,13 +11,16 @@ const Filters = ({ filters, setFilters }) => {
         const fetchMetadata = async () => {
             try {
                 const response = await axios.get("http://localhost:3000/api/metadata");
-                const { locations, roles, departments } = response.data;
+                const { locations, roles, departments, administrations } = response.data;
+
+                // Map roles to use the correct key "title" instead of "name"
+                const mappedRoles = roles.map((role) => ({ id: role.id, name: role.title }));
 
                 setLocations(locations);
-                setRoles(roles);
-                setAdministrations(departments);
+                setRoles(mappedRoles);
+                setAdministrations(administrations);
             } catch (error) {
-                console.error("Error fetching metadata for filters:", error);
+                console.error("خطأ في جلب البيانات الوصفية للفلاتر:", error);
             }
         };
 
@@ -35,7 +38,7 @@ const Filters = ({ filters, setFilters }) => {
                 });
                 setDepartments(response.data);
             } catch (error) {
-                console.error("Error fetching departments:", error);
+                console.error("خطأ في جلب الأقسام:", error);
             }
         }
     };
@@ -53,21 +56,21 @@ const Filters = ({ filters, setFilters }) => {
     return (
         <div className="flex flex-wrap gap-4 items-end">
             <FilterDropdown
-                label="Location"
+                label="الموقع"
                 name="location"
                 options={locations}
                 value={filters.location}
                 onChange={handleFilterChange}
             />
             <FilterDropdown
-                label="Role"
+                label="الصفة الوظيفية"
                 name="role"
                 options={roles}
                 value={filters.role}
                 onChange={handleFilterChange}
             />
             <FilterDropdown
-                label="Administration"
+                label="الإدارة"
                 name="administration"
                 options={administrations}
                 value={filters.administration}
@@ -75,7 +78,7 @@ const Filters = ({ filters, setFilters }) => {
             />
             {departments.length > 0 && (
                 <FilterDropdown
-                    label="Department"
+                    label="القسم"
                     name="department"
                     options={departments}
                     value={filters.department}
@@ -87,7 +90,7 @@ const Filters = ({ filters, setFilters }) => {
                     onClick={resetFilters}
                     className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-lg font-medium transition duration-200"
                 >
-                    Reset
+                    إعادة تعيين
                 </button>
             </div>
         </div>
@@ -103,7 +106,7 @@ const FilterDropdown = ({ label, name, options, value, onChange }) => (
             onChange={onChange}
             className="w-full border border-blue-500 rounded-lg px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
         >
-            <option value="">All</option>
+            <option value="">الكل</option>
             {options.map((option) => (
                 <option key={option.id} value={option.id}>
                     {option.name}
