@@ -5,6 +5,26 @@ const EmployeeList = ({ userRole, filters, searchText, setSelectedEmployee }) =>
     const [employees, setEmployees] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [departments, setDepartments] = useState([]);
+
+    useEffect(() => {
+        const fetchDepartments = async () => {
+            if (filters.administration) {
+                try {
+                    const response = await axios.get("http://localhost:3000/api/departments", {
+                        params: { administration_id: filters.administration },
+                    });
+                    setDepartments(response.data);
+                } catch (error) {
+                    console.error("Error fetching departments:", error);
+                }
+            } else {
+                setDepartments([]);
+            }
+        };
+
+        fetchDepartments();
+    }, [filters.administration]);
 
     useEffect(() => {
         const fetchEmployees = async () => {
@@ -25,12 +45,11 @@ const EmployeeList = ({ userRole, filters, searchText, setSelectedEmployee }) =>
                     id: employee.id,
                     name: employee.name || "غير معروف",
                     role: employee.role_name || "غير معروف",
-                    department: employee.department_name || "غير معروف",
+                    department: `${employee.administration_name || "غير معروف"} - ${employee.department_name || "غير معروف"}`,
                     internalNumber: employee.internal_number || "غير متوفر",
                     directNumber: employee.external_number || "غير متوفر",
                     voipNumber: employee.voip_number || "غير متوفر",
                     workLocation: employee.location_name || "غير معروف",
-                    administration: employee.administration_name || "غير معروف",
                 }));
 
                 setEmployees(mappedEmployees);
@@ -58,12 +77,11 @@ const EmployeeList = ({ userRole, filters, searchText, setSelectedEmployee }) =>
                             <tr>
                                 <th className="px-6 py-4 text-sm font-semibold">الاسم</th>
                                 <th className="px-6 py-4 text-sm font-semibold">الدور</th>
-                                <th className="px-6 py-4 text-sm font-semibold">القسم</th>
+                                <th className="px-6 py-4 text-sm font-semibold">الإدارة - القسم</th>
                                 <th className="px-6 py-4 text-sm font-semibold">الرقم الداخلي</th>
                                 <th className="px-6 py-4 text-sm font-semibold">الرقم المباشر</th>
                                 <th className="px-6 py-4 text-sm font-semibold">رقم VoIP</th>
                                 <th className="px-6 py-4 text-sm font-semibold">الموقع</th>
-                                <th className="px-6 py-4 text-sm font-semibold">الإدارة</th>
                                 {userRole === "admin" && (
                                     <th className="px-6 py-4 text-sm font-semibold">الإجراءات</th>
                                 )}
@@ -84,7 +102,6 @@ const EmployeeList = ({ userRole, filters, searchText, setSelectedEmployee }) =>
                                         <td className="px-6 py-4 border-t">{employee.directNumber}</td>
                                         <td className="px-6 py-4 border-t">{employee.voipNumber}</td>
                                         <td className="px-6 py-4 border-t">{employee.workLocation}</td>
-                                        <td className="px-6 py-4 border-t">{employee.administration}</td>
                                         {userRole === "admin" && (
                                             <td className="px-6 py-4 border-t">
                                                 <button
@@ -104,7 +121,7 @@ const EmployeeList = ({ userRole, filters, searchText, setSelectedEmployee }) =>
                             ) : (
                                 <tr>
                                     <td
-                                        colSpan={userRole === "admin" ? 9 : 8}
+                                        colSpan={userRole === "admin" ? 8 : 7}
                                         className="px-6 py-4 text-center text-gray-500"
                                     >
                                         لم يتم العثور على موظفين.
