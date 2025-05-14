@@ -1,26 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const LoginPage = ({ setUserRole }) => {
   const [employeeNumber, setEmployeeNumber] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [logins, setLogins] = useState([]);
 
-  const handleLogin = async () => {
-    try {
-      const { data } = await axios.get('http://localhost:3000/api/logins');
-      const user = data.logins.find(
-        (login) => login.employeeNumber === employeeNumber && login.password === password
-      );
-
-      if (user) {
-        setUserRole(user.role || 'user');
-      } else {
-        setMessage('Invalid employee number or password.');
+  useEffect(() => {
+    const fetchLogins = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/logins');
+        setLogins(response.data);
+      } catch (error) {
+        console.error('Error fetching login data:', error);
       }
-    } catch (error) {
-      console.error('Error fetching login data:', error);
-      setMessage('An error occurred. Please try again later.');
+    };
+
+    fetchLogins();
+  }, []);
+
+  const handleLogin = () => {
+    const user = logins.find(
+      (login) => login.employee_number === employeeNumber && login.password === password
+    );
+
+    if (user) {
+      setUserRole(user.role || 'user');
+    } else {
+      setMessage('Invalid employee number or password.');
     }
   };
 
@@ -38,7 +46,7 @@ const LoginPage = ({ setUserRole }) => {
           }}
         >
           <div className="mb-4">
-            <label htmlFor="employee-number" className="block text-gray-700 mb-2">الرقم الوظيفي:</label>
+            <label htmlFor="employee-number" className="block text-gray-700 mb-2">Employee Number:</label>
             <input
               id="employee-number"
               type="text"
@@ -49,7 +57,7 @@ const LoginPage = ({ setUserRole }) => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="password" className="block text-gray-700 mb-2">كلمة السر:</label>
+            <label htmlFor="password" className="block text-gray-700 mb-2">Password:</label>
             <input
               id="password"
               type="password"

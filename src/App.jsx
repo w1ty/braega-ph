@@ -12,23 +12,44 @@ const PhoneDirectory = ({ userRole }) => {
     const [filters, setFilters] = useState({
         location: "",
         role: "",
-        department: "",
-        section: "" // Added section to the filters state
+        administration: "",
+        department: ""
     });
     const [selectedEmployee, setSelectedEmployee] = useState(null);
     const [employees, setEmployees] = useState([]);
+    const [metadata, setMetadata] = useState({
+        locations: {},
+        roles: {},
+        administrations: [],
+    });
 
     useEffect(() => {
-        const fetchEmployees = async () => {
+        const fetchMetadata = async () => {
             try {
-                const response = await axios.get("http://localhost:3000/api/employees");
-                setEmployees(response.data);
+                const response = await axios.get("http://localhost:3000/api/metadata");
+                const { locations, roles, departments, administrations } = response.data;
+
+                // Map IDs to names for easier lookup
+                const locationMap = Object.fromEntries(locations.map((loc) => [loc.id, loc.name]));
+                const roleMap = Object.fromEntries(roles.map((role) => [role.id, role.name]));
+                const administrationMap = Object.fromEntries(administrations.map((admin) => [admin.id, admin.name]));
+
+                const translatedAdministrations = departments.map((department) => ({
+                    ...department,
+                    administration_name: administrationMap[department.administration_id] || "Unknown",
+                }));
+
+                setMetadata({
+                    locations: locationMap,
+                    roles: roleMap,
+                    administrations: translatedAdministrations,
+                });
             } catch (error) {
-                console.error("Error fetching employees:", error);
+                console.error("Error fetching metadata:", error);
             }
         };
 
-        fetchEmployees();
+        fetchMetadata();
     }, []);
 
     return (
@@ -40,11 +61,17 @@ const PhoneDirectory = ({ userRole }) => {
                     <Filters filters={filters} setFilters={setFilters} />
                 </div>
                 <EmployeeList
-                    employees={employees}
+                    employees={employees.map((employee) => ({
+                        ...employee,
+                        location_name: metadata.locations[employee.location_id] || "Unknown",
+                        role_name: metadata.roles[employee.role_id] || "Unknown",
+                        department_name: metadata.administrations.find((d) => d.id === employee.department_id)?.name || "Unknown",
+                        administration_name: metadata.administrations.find((d) => d.id === employee.department_id)?.administration_name || "Unknown",
+                    }))}
                     filters={filters}
                     searchText={searchText}
                     setSelectedEmployee={setSelectedEmployee}
-                    userRole={userRole} // Pass userRole to EmployeeList
+                    userRole={userRole}
                 />
                 {selectedEmployee && (
                     <EmployeeDetailsModal

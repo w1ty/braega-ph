@@ -1,4 +1,3 @@
-
 import express from "express";
 import cors from "cors";
 import fs from "fs";
@@ -25,9 +24,7 @@ app.get("/api/employees", (req, res) => {
 res.json(employees);
 });
 
-app.get("/api/logins", (req, res) => {
-res.json(logins);
-});
+//
 
 // app.js
 
@@ -45,25 +42,23 @@ db.query(query, [employee_number, password, role], (err, result) => {
 
 // تسجيل الدخول والتحقق من المستخدم
 app.post("/login", (req, res) => {
-const { employee_number, password } = req.body;
+    const { employee_number, password } = req.body;
 
-const query = "SELECT * FROM users WHERE employee_number = ?";  
-db.query(query, [employee_number], (err, results) => {  
-    if (err) return res.status(500).send("خطأ في استعلام قاعدة البيانات.");  
-    if (results.length === 0)  
-        return res.status(404).send("المستخدم غير موجود.");  
+    const query = "SELECT * FROM users WHERE employee_number = ?";
+    db.query(query, [employee_number], (err, results) => {
+        if (err) return res.status(500).send("Database query error.");
+        if (results.length === 0) return res.status(404).send("User not found.");
 
-    const user = results[0];  
+        const user = results[0];
 
-    // مقارنة كلمة السر  
-    if (user.password_hash !== password) {  
-        return res.status(401).send("كلمة السر غير صحيحة.");  
-    }  
+        // Compare the provided password directly with the stored password
+        if (user.password !== password) {
+            return res.status(401).send("Incorrect password.");
+        }
 
-    // تسجيل الدخول ناجح  
-    res.status(200).send("تم تسجيل الدخول بنجاح!");  
-});
-
+        // Successful login
+        res.status(200).send({ message: "Login successful!", role: user.role });
+    });
 });
 
 // جلب جميع الإدارات
@@ -115,6 +110,43 @@ db.query(query, params, (err, results) => {
     res.status(200).json(results);  
 });
 
+});
+
+// Add endpoint to fetch login data
+app.get("/api/logins", (req, res) => {
+    const query = "SELECT employee_number, password, role FROM users";
+    db.query(query, (err, results) => {
+        if (err) return res.status(500).send("Error fetching login data.");
+        res.status(200).json(results);
+    });
+});
+
+// Add endpoint to fetch all locations, roles, departments, and administrations
+app.get("/api/metadata", (req, res) => {
+    const queries = {
+        locations: "SELECT id, name FROM locations",
+        roles: "SELECT id, title FROM job_titles",
+        departments: "SELECT id, name, administration_id FROM departments",
+        administrations: "SELECT id, name FROM administrations"
+    };
+
+    const results = {};
+    let completed = 0;
+
+    Object.keys(queries).forEach((key) => {
+        db.query(queries[key], (err, data) => {
+            if (err) {
+                return res.status(500).send(`Error fetching ${key}`);
+            }
+
+            results[key] = data;
+            completed++;
+
+            if (completed === Object.keys(queries).length) {
+                res.status(200).json(results);
+            }
+        });
+    });
 });
 
 app.listen(PORT, () => {
