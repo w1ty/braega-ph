@@ -224,6 +224,10 @@ const AdminControlPanel = () => {
                                 <th className="px-6 py-4 text-sm font-semibold">الاسم</th>
                                 <th className="px-6 py-4 text-sm font-semibold">الصفة</th>
                                 <th className="px-6 py-4 text-sm font-semibold">الإدارة - القسم</th>
+                                <th className="px-6 py-4 text-sm font-semibold">الرقم الداخلي</th>
+                                <th className="px-6 py-4 text-sm font-semibold">الرقم المباشر</th>
+                                <th className="px-6 py-4 text-sm font-semibold">رقم VoIP</th>
+                                <th className="px-6 py-4 text-sm font-semibold">الموقع</th>
                                 <th className="px-6 py-4 text-sm font-semibold">الإجراءات</th>
                             </tr>
                         </thead>
@@ -233,6 +237,10 @@ const AdminControlPanel = () => {
                                     <td className="px-6 py-4">{employee.name}</td>
                                     <td className="px-6 py-4">{employee.role_name}</td>
                                     <td className="px-6 py-4">{employee.administration_name} - {employee.department_name}</td>
+                                    <td className="px-6 py-4">{employee.internal_number}</td>
+                                    <td className="px-6 py-4">{employee.external_number}</td>
+                                    <td className="px-6 py-4">{employee.voip_number}</td>
+                                    <td className="px-6 py-4">{employee.location_name}</td>
                                     <td className="px-6 py-4">
                                         <button
                                             onClick={() => handleDelete(employee.id)}
@@ -254,10 +262,136 @@ const AdminControlPanel = () => {
                 )}
             </div>
             {editEmployee && (
-                <div className="modal">
-                    <h2>تعديل الموظف</h2>
-                    {/* Add form fields to edit employee details */}
-                    <button onClick={() => setEditEmployee(null)}>إغلاق</button>
+                <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-1/2">
+                        <h2 className="text-xl font-bold mb-4">تعديل الموظف</h2>
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                fetch(`http://localhost:3000/api/update/employee/${editEmployee.id}`, {
+                                    method: "PUT",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify(editEmployee),
+                                })
+                                    .then((response) => {
+                                        if (!response.ok) {
+                                            throw new Error("Failed to update employee");
+                                        }
+                                        return response.json();
+                                    })
+                                    .then(() => {
+                                        alert("Employee updated successfully");
+                                        setEmployees((prev) =>
+                                            prev.map((emp) => (emp.id === editEmployee.id ? editEmployee : emp))
+                                        );
+                                        setEditEmployee(null);
+                                    })
+                                    .catch((error) => {
+                                        console.error(error);
+                                        alert("Failed to update employee.");
+                                    });
+                            }}
+                        >
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">الاسم</label>
+                                <input
+                                    type="text"
+                                    value={editEmployee.name}
+                                    onChange={(e) => setEditEmployee({ ...editEmployee, name: e.target.value })}
+                                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">الرقم الداخلي</label>
+                                <input
+                                    type="text"
+                                    value={editEmployee.internal_number}
+                                    onChange={(e) => setEditEmployee({ ...editEmployee, internal_number: e.target.value })}
+                                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">الرقم المباشر</label>
+                                <input
+                                    type="text"
+                                    value={editEmployee.external_number}
+                                    onChange={(e) => setEditEmployee({ ...editEmployee, external_number: e.target.value })}
+                                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">رقم VoIP</label>
+                                <input
+                                    type="text"
+                                    value={editEmployee.voip_number}
+                                    onChange={(e) => setEditEmployee({ ...editEmployee, voip_number: e.target.value })}
+                                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">الموقع</label>
+                                <input
+                                    type="text"
+                                    value={editEmployee.location_name}
+                                    onChange={(e) => setEditEmployee({ ...editEmployee, location_name: e.target.value })}
+                                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">الإدارة</label>
+                                <input
+                                    type="text"
+                                    value={editEmployee.administration}
+                                    onChange={(e) => setEditEmployee({ ...editEmployee, administration: e.target.value })}
+                                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">القسم</label>
+                                <input
+                                    type="text"
+                                    value={editEmployee.department_id}
+                                    onChange={(e) => setEditEmployee({ ...editEmployee, department_id: e.target.value })}
+                                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">الصفة</label>
+                                <input
+                                    type="text"
+                                    value={editEmployee.role_id}
+                                    onChange={(e) => setEditEmployee({ ...editEmployee, role_id: e.target.value })}
+                                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">الموقع</label>
+                                <input
+                                    type="text"
+                                    value={editEmployee.location_id}
+                                    onChange={(e) => setEditEmployee({ ...editEmployee, location_id: e.target.value })}
+                                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+                            <div className="flex justify-end">
+                                <button
+                                    type="button"
+                                    onClick={() => setEditEmployee(null)}
+                                    className="bg-gray-500 text-white px-4 py-2 rounded-lg mr-2"
+                                >
+                                    إلغاء
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+                                >
+                                    حفظ
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             )}
         </div>

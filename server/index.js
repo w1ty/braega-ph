@@ -177,6 +177,37 @@ app.delete("/api/employees/:id", (req, res) => {
     });
 });
 
+// Add a single endpoint to update either an employee or an administration
+app.put("/api/update/:type/:id", (req, res) => {
+    const { type, id } = req.params;
+    const { name, internal_number, external_number, voip_number, role_id, location_id, department_id, administration_id } = req.body;
+
+    let query;
+    let params;
+
+    if (type === "employee") {
+        query = `
+            UPDATE directory 
+            SET name = ?, internal_number = ?, external_number = ?, voip_number = ?, 
+                job_title_id = ?, location_id = ?, department_id = ?, administration_id = ?
+            WHERE id = ?
+        `;
+        params = [name, internal_number, external_number, voip_number, role_id, location_id, department_id, administration_id, id];
+    } else if (type === "administration") {
+        query = "UPDATE administration_id SET name = ? WHERE id = ?";
+        params = [name, id];
+    } else {
+        return res.status(400).send("Invalid type specified.");
+    }
+
+    db.query(query, params, (err, result) => {
+        if (err) return res.status(500).send(`Error updating ${type}.`);
+        if (result.affectedRows === 0) return res.status(404).send(`${type.charAt(0).toUpperCase() + type.slice(1)} not found.`);
+
+        res.status(200).send(`${type.charAt(0).toUpperCase() + type.slice(1)} updated successfully.`);
+    });
+});
+
 app.listen(PORT, () => {
 console.log('Server is running on http://localhost:' + PORT);
 });
