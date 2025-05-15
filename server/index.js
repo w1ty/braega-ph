@@ -136,13 +136,13 @@ app.get("/api/logins", (req, res) => {
     });
 });
 
-// Add endpoint to fetch all locations, roles, departments, and administrations
+// Updated endpoint to fetch metadata for roles, locations, departments, and administrations
 app.get("/api/metadata", (req, res) => {
     const queries = {
-        locations: "SELECT id, name FROM locations",
         roles: "SELECT id, title FROM job_titles",
-        departments: "SELECT id, name, administration_id FROM departments",
-        administrations: "SELECT id, name FROM administrations"
+        locations: "SELECT id, name FROM locations",
+        departments: "SELECT id, name FROM departments",
+        administrations: "SELECT id, name FROM administrations",
     };
 
     const results = {};
@@ -162,6 +162,28 @@ app.get("/api/metadata", (req, res) => {
             }
         });
     });
+});
+
+// Updated endpoint to add a new employee
+app.post("/api/employees", (req, res) => {
+    const { name, internalNumber, directNumber, voipNumber, role, location, department, administration } = req.body;
+
+    const query = `
+        INSERT INTO directory (name, internal_number, external_number, voip_number, job_title_id, location_id, department_id, administration_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    db.query(
+        query,
+        [name, internalNumber, directNumber, voipNumber, role, location, department, administration],
+        (err, result) => {
+            if (err) {
+                console.error("Error adding new employee:", err);
+                return res.status(500).json({ message: "خطأ في إضافة الموظف." });
+            }
+            res.status(201).json({ message: "تم إضافة الموظف بنجاح!" });
+        }
+    );
 });
 
 app.listen(PORT, () => {
