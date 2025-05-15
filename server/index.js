@@ -201,10 +201,34 @@ app.put("/api/update/:type/:id", (req, res) => {
     }
 
     db.query(query, params, (err, result) => {
-        if (err) return res.status(500).send(`Error updating ${type}.`);
-        if (result.affectedRows === 0) return res.status(404).send(`${type.charAt(0).toUpperCase() + type.slice(1)} not found.`);
+        if (err) return res.status(500).json({ error: `Error updating ${type}.` });
+        if (result.affectedRows === 0) return res.status(404).json({ error: `${type.charAt(0).toUpperCase() + type.slice(1)} not found.` });
 
-        res.status(200).send(`${type.charAt(0).toUpperCase() + type.slice(1)} updated successfully.`);
+        res.status(200).json({ message: `${type.charAt(0).toUpperCase() + type.slice(1)} updated successfully.` });
+    });
+});
+
+// Add endpoint to create a new employee
+app.post("/api/employees", (req, res) => {
+    const { name, internal_number, external_number, voip_number, role_id, location_id, department_id, administration_id } = req.body;
+
+    console.log("Request body:", req.body);
+
+    const query = `
+        INSERT INTO directory (name, internal_number, external_number, voip_number, job_title_id, location_id, department_id, administration_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    const params = [name, internal_number, external_number, voip_number, role_id, location_id, department_id, administration_id];
+
+    db.query(query, params, (err, result) => {
+        if (err) {
+            console.error("MySQL Error:", err);
+            return res.status(500).json({ error: "Error adding employee." });
+        }
+
+        console.log("MySQL Result:", result);
+        res.status(201).json({ message: "Employee added successfully.", employeeId: result.insertId });
     });
 });
 

@@ -52,12 +52,24 @@ const AdminControlPanel = () => {
     };
 
     const handleAddEmployee = () => {
+        console.log("New Employee Data:", newEmployee);
+        const mappedEmployee = {
+            name: newEmployee.name,
+            internal_number: newEmployee.internalNumber,
+            external_number: newEmployee.directNumber,
+            voip_number: newEmployee.voipNumber,
+            role_id: newEmployee.role,
+            location_id: newEmployee.location,
+            department_id: newEmployee.department,
+            administration_id: newEmployee.administration,
+        };
+
         fetch("http://localhost:3000/api/employees", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(newEmployee),
+            body: JSON.stringify(mappedEmployee),
         })
             .then((response) => {
                 if (!response.ok) {
@@ -341,39 +353,42 @@ const AdminControlPanel = () => {
                             </div>
                             <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700 mb-2">الإدارة</label>
-                                <input
-                                    type="text"
+                                <select
                                     value={editEmployee.administration}
                                     onChange={(e) => setEditEmployee({ ...editEmployee, administration: e.target.value })}
                                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
+                                >
+                                    <option value="">اختر الإدارة</option>
+                                    {metadata.administrations.map((administration) => (
+                                        <option key={administration.id} value={administration.id}>{administration.name}</option>
+                                    ))}
+                                </select>
                             </div>
                             <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700 mb-2">القسم</label>
-                                <input
-                                    type="text"
+                                <select
                                     value={editEmployee.department_id}
                                     onChange={(e) => setEditEmployee({ ...editEmployee, department_id: e.target.value })}
                                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
+                                >
+                                    <option value="">اختر القسم</option>
+                                    {metadata.departments.map((department) => (
+                                        <option key={department.id} value={department.id}>{department.name}</option>
+                                    ))}
+                                </select>
                             </div>
                             <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700 mb-2">الصفة</label>
-                                <input
-                                    type="text"
+                                <select
                                     value={editEmployee.role_id}
                                     onChange={(e) => setEditEmployee({ ...editEmployee, role_id: e.target.value })}
                                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">الموقع</label>
-                                <input
-                                    type="text"
-                                    value={editEmployee.location_id}
-                                    onChange={(e) => setEditEmployee({ ...editEmployee, location_id: e.target.value })}
-                                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
+                                >
+                                    <option value="">اختر الصفة</option>
+                                    {metadata.roles.map((role) => (
+                                        <option key={role.id} value={role.id}>{role.title}</option>
+                                    ))}
+                                </select>
                             </div>
                             <div className="flex justify-end">
                                 <button
