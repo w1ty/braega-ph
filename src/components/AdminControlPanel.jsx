@@ -147,14 +147,14 @@ const AdminControlPanel = () => {
                 </div>
                 <div className="grid grid-cols-2 gap-4 mb-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">الدور</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">الصفة</label>
                         <select
                             name="role"
                             value={newEmployee.role}
                             onChange={handleInputChange}
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
-                            <option value="">اختر الدور</option>
+                            <option value="">اختر الصفة </option>
                             {metadata.roles.map((role) => (
                                 <option key={role.id} value={role.id}>{role.title}</option>
                             ))}
@@ -222,7 +222,7 @@ const AdminControlPanel = () => {
                         <thead className="bg-blue-800 text-white">
                             <tr>
                                 <th className="px-6 py-4 text-sm font-semibold">الاسم</th>
-                                <th className="px-6 py-4 text-sm font-semibold">الدور</th>
+                                <th className="px-6 py-4 text-sm font-semibold">الصفة</th>
                                 <th className="px-6 py-4 text-sm font-semibold">الإدارة - القسم</th>
                                 <th className="px-6 py-4 text-sm font-semibold">الإجراءات</th>
                             </tr>
