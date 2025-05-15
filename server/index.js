@@ -136,13 +136,13 @@ app.get("/api/logins", (req, res) => {
     });
 });
 
-// Updated endpoint to fetch metadata for roles, locations, departments, and administrations
+// Add endpoint to fetch all locations, roles, departments, and administrations
 app.get("/api/metadata", (req, res) => {
     const queries = {
-        roles: "SELECT id, title FROM job_titles",
         locations: "SELECT id, name FROM locations",
-        departments: "SELECT id, name FROM departments",
-        administrations: "SELECT id, name FROM administrations",
+        roles: "SELECT id, title FROM job_titles",
+        departments: "SELECT id, name, administration_id FROM departments",
+        administrations: "SELECT id, name FROM administrations"
     };
 
     const results = {};
@@ -164,26 +164,17 @@ app.get("/api/metadata", (req, res) => {
     });
 });
 
-// Updated endpoint to add a new employee
-app.post("/api/employees", (req, res) => {
-    const { name, internalNumber, directNumber, voipNumber, role, location, department, administration } = req.body;
+// Add endpoint to delete an employee
+app.delete("/api/employees/:id", (req, res) => {
+    const { id } = req.params;
+    const query = "DELETE FROM directory WHERE id = ?";
 
-    const query = `
-        INSERT INTO directory (name, internal_number, external_number, voip_number, job_title_id, location_id, department_id, administration_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `;
+    db.query(query, [id], (err, result) => {
+        if (err) return res.status(500).send("Error deleting employee.");
+        if (result.affectedRows === 0) return res.status(404).send("Employee not found.");
 
-    db.query(
-        query,
-        [name, internalNumber, directNumber, voipNumber, role, location, department, administration],
-        (err, result) => {
-            if (err) {
-                console.error("Error adding new employee:", err);
-                return res.status(500).json({ message: "خطأ في إضافة الموظف." });
-            }
-            res.status(201).json({ message: "تم إضافة الموظف بنجاح!" });
-        }
-    );
+        res.status(200).send("Employee deleted successfully.");
+    });
 });
 
 app.listen(PORT, () => {

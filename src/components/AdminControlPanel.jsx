@@ -17,12 +17,33 @@ const AdminControlPanel = () => {
         departments: [],
         administrations: [],
     });
+    const [employees, setEmployees] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [editEmployee, setEditEmployee] = useState(null);
 
     useEffect(() => {
         fetch("http://localhost:3000/api/metadata")
             .then((response) => response.json())
             .then((data) => setMetadata(data))
             .catch((error) => console.error("Error fetching metadata:", error));
+    }, []);
+
+    useEffect(() => {
+        const fetchEmployees = async () => {
+            setLoading(true);
+            try {
+                const response = await fetch("http://localhost:3000/api/directory");
+                const data = await response.json();
+                setEmployees(data);
+            } catch (err) {
+                setError("Failed to fetch employees.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchEmployees();
     }, []);
 
     const handleInputChange = (e) => {
@@ -61,6 +82,19 @@ const AdminControlPanel = () => {
                 console.error(error);
                 alert("خطأ في إضافة الموظف.");
             });
+    };
+
+    const handleDelete = async (id) => {
+        try {
+            await fetch(`http://localhost:3000/api/employees/${id}`, { method: "DELETE" });
+            setEmployees(employees.filter((employee) => employee.id !== id));
+        } catch (err) {
+            alert("Failed to delete employee.");
+        }
+    };
+
+    const handleUpdate = (employee) => {
+        setEditEmployee(employee);
     };
 
     return (
@@ -178,6 +212,54 @@ const AdminControlPanel = () => {
                     إضافة موظف جديد
                 </button>
             </div>
+            <div className="bg-white rounded-lg shadow-md p-6 mt-6">
+                {loading ? (
+                    <p>جاري التحميل...</p>
+                ) : error ? (
+                    <p className="text-red-500">{error}</p>
+                ) : (
+                    <table className="min-w-full text-right border-collapse">
+                        <thead className="bg-blue-800 text-white">
+                            <tr>
+                                <th className="px-6 py-4 text-sm font-semibold">الاسم</th>
+                                <th className="px-6 py-4 text-sm font-semibold">الدور</th>
+                                <th className="px-6 py-4 text-sm font-semibold">الإدارة - القسم</th>
+                                <th className="px-6 py-4 text-sm font-semibold">الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {employees.map((employee) => (
+                                <tr key={employee.id} className="border-b">
+                                    <td className="px-6 py-4">{employee.name}</td>
+                                    <td className="px-6 py-4">{employee.role_name}</td>
+                                    <td className="px-6 py-4">{employee.administration_name} - {employee.department_name}</td>
+                                    <td className="px-6 py-4">
+                                        <button
+                                            onClick={() => handleDelete(employee.id)}
+                                            className="bg-red-500 text-white px-2 py-1 rounded mr-2"
+                                        >
+                                            حذف
+                                        </button>
+                                        <button
+                                            onClick={() => handleUpdate(employee)}
+                                            className="bg-blue-500 text-white px-2 py-1 rounded"
+                                        >
+                                            تعديل
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
+            </div>
+            {editEmployee && (
+                <div className="modal">
+                    <h2>تعديل الموظف</h2>
+                    {/* Add form fields to edit employee details */}
+                    <button onClick={() => setEditEmployee(null)}>إغلاق</button>
+                </div>
+            )}
         </div>
     );
 };
