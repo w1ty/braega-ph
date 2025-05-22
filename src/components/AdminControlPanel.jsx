@@ -33,7 +33,7 @@ const AdminControlPanel = () => {
         const fetchEmployees = async () => {
             setLoading(true);
             try {
-                const response = await fetch("https://braega-ph.onrender.comapi/directory");
+                const response = await fetch("https://braega-ph.onrender.com/api/directory");
                 const data = await response.json();
                 setEmployees(data);
             } catch (err) {
