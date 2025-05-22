@@ -10,7 +10,7 @@ const Filters = ({ filters, setFilters }) => {
     useEffect(() => {
         const fetchMetadata = async () => {
             try {
-                const response = await axios.get("http://localhost:3000/api/metadata");
+                const response = await axios.get("https://braega-ph.onrender.com/api/metadata");
                 const { locations, roles, departments, administrations } = response.data;
 
                 // Map roles to use the correct key "title" instead of "name"
@@ -33,7 +33,7 @@ const Filters = ({ filters, setFilters }) => {
 
         if (name === "administration") {
             try {
-                const response = await axios.get("http://localhost:3000/api/departments", {
+                const response = await axios.get("https://braega-ph.onrender.com/api/departments", {
                     params: { administration_id: value },
                 });
                 setDepartments(response.data);

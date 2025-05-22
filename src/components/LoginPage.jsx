@@ -10,7 +10,7 @@ const LoginPage = ({ setUserRole }) => {
   useEffect(() => {
     const fetchLogins = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/logins');
+        const response = await axios.get('https://braega-ph.onrender.com/api/logins');
         setLogins(response.data);
       } catch (error) {
         console.error('Error fetching login data:', error);

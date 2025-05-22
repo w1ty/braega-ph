@@ -21,7 +21,7 @@ const PhoneDirectory = () => {
     useEffect(() => {
         const fetchEmployees = async () => {
             try {
-                const response = await axios.get("http://localhost:3000/api/employees");
+                const response = await axios.get("https://braega-ph.onrender.com/api/employees");
                 setEmployees(response.data);
             } catch (error) {
                 console.error("Error fetching employees:", error);

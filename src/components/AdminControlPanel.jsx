@@ -23,7 +23,7 @@ const AdminControlPanel = () => {
     const [editEmployee, setEditEmployee] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost:3000/api/metadata")
+        fetch("https://braega-ph.onrender.com/api/metadata")
             .then((response) => response.json())
             .then((data) => setMetadata(data))
             .catch((error) => console.error("Error fetching metadata:", error));
@@ -33,7 +33,7 @@ const AdminControlPanel = () => {
         const fetchEmployees = async () => {
             setLoading(true);
             try {
-                const response = await fetch("http://localhost:3000/api/directory");
+                const response = await fetch("https://braega-ph.onrender.comapi/directory");
                 const data = await response.json();
                 setEmployees(data);
             } catch (err) {
@@ -64,7 +64,7 @@ const AdminControlPanel = () => {
             administration_id: newEmployee.administration,
         };
 
-        fetch("http://localhost:3000/api/employees", {
+        fetch("https://braega-ph.onrender.com/api/employees", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -98,7 +98,7 @@ const AdminControlPanel = () => {
 
     const handleDelete = async (id) => {
         try {
-            await fetch(`http://localhost:3000/api/employees/${id}`, { method: "DELETE" });
+            await fetch(`https://braega-ph.onrender.com/api/employees/${id}`, { method: "DELETE" });
             setEmployees(employees.filter((employee) => employee.id !== id));
         } catch (err) {
             alert("Failed to delete employee.");
@@ -280,7 +280,7 @@ const AdminControlPanel = () => {
                         <form
                             onSubmit={(e) => {
                                 e.preventDefault();
-                                fetch(`http://localhost:3000/api/update/employee/${editEmployee.id}`, {
+                                fetch(`https://braega-ph.onrender.com/api/update/employee/${editEmployee.id}`, {
                                     method: "PUT",
                                     headers: {
                                         "Content-Type": "application/json",

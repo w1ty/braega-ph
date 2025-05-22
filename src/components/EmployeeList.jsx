@@ -11,7 +11,7 @@ const EmployeeList = ({ userRole, filters, searchText, setSelectedEmployee }) =>
         const fetchDepartments = async () => {
             if (filters.administration) {
                 try {
-                    const response = await axios.get("http://localhost:3000/api/departments", {
+                    const response = await axios.get("https://braega-ph.onrender.com/api/departments", {
                         params: { administration_id: filters.administration },
                     });
                     setDepartments(response.data);
@@ -31,7 +31,7 @@ const EmployeeList = ({ userRole, filters, searchText, setSelectedEmployee }) =>
             setLoading(true);
             setError(null);
             try {
-                const response = await axios.get("http://localhost:3000/api/directory", {
+                const response = await axios.get("https://braega-ph.onrender.com/api/directory", {
                     params: {
                         administration_id: filters.administration,
                         department_id: filters.department,
