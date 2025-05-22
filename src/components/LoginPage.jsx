@@ -36,7 +36,7 @@ const LoginPage = ({ setUserRole }) => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md w-96">
         <div className="flex justify-center mb-4">
-          <img src="/public/logo.png" alt="Logo" className="h-16" />
+          <img src="logo.png" alt="Logo" className="h-16" />
         </div>
         <h1 className="text-2xl font-bold text-center mb-6">Login</h1>
         <form
