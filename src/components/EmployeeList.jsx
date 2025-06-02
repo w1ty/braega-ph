@@ -65,25 +65,25 @@ const EmployeeList = ({ userRole, filters, searchText, setSelectedEmployee }) =>
     }, [filters, searchText]);
 
     return (
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden border-t-8 border-blue-700">
             <div className="overflow-x-auto">
                 {loading ? (
-                    <p className="text-center py-4">جاري التحميل...</p>
+                    <p className="text-center py-8 text-lg text-blue-700 font-semibold">جاري التحميل...</p>
                 ) : error ? (
-                    <p className="text-center text-red-500 py-4">{error}</p>
+                    <p className="text-center text-blue-700 py-8 text-lg font-semibold">{error}</p>
                 ) : (
                     <table className="min-w-full text-right border-collapse">
                         <thead className="bg-blue-800 text-white">
                             <tr>
-                                <th className="px-6 py-4 text-sm font-semibold">الاسم</th>
-                                <th className="px-6 py-4 text-sm font-semibold">الدور</th>
-                                <th className="px-6 py-4 text-sm font-semibold">الإدارة - القسم</th>
-                                <th className="px-6 py-4 text-sm font-semibold">الرقم الداخلي</th>
-                                <th className="px-6 py-4 text-sm font-semibold">الرقم المباشر</th>
-                                <th className="px-6 py-4 text-sm font-semibold">رقم VoIP</th>
-                                <th className="px-6 py-4 text-sm font-semibold">الموقع</th>
+                                <th className="px-6 py-4 text-base font-bold tracking-wide">الاسم</th>
+                                <th className="px-6 py-4 text-base font-bold tracking-wide">الدور</th>
+                                <th className="px-6 py-4 text-base font-bold tracking-wide">الإدارة - القسم</th>
+                                <th className="px-6 py-4 text-base font-bold tracking-wide">الرقم الداخلي</th>
+                                <th className="px-6 py-4 text-base font-bold tracking-wide">الرقم المباشر</th>
+                                <th className="px-6 py-4 text-base font-bold tracking-wide">رقم VoIP</th>
+                                <th className="px-6 py-4 text-base font-bold tracking-wide">الموقع</th>
                                 {userRole === "admin" && (
-                                    <th className="px-6 py-4 text-sm font-semibold">الإجراءات</th>
+                                    <th className="px-6 py-4 text-base font-bold tracking-wide">الإجراءات</th>
                                 )}
                             </tr>
                         </thead>
@@ -92,25 +92,25 @@ const EmployeeList = ({ userRole, filters, searchText, setSelectedEmployee }) =>
                                 employees.map((employee) => (
                                     <tr
                                         key={employee.id}
-                                        className="border-b hover:bg-blue-100 transition duration-200 ease-in-out cursor-pointer"
+                                        className="border-b hover:bg-blue-50 transition duration-200 ease-in-out cursor-pointer group"
                                         onClick={() => setSelectedEmployee(employee)}
                                     >
-                                        <td className="px-6 py-4 font-medium border-t text-gray-700">{employee.name}</td>
-                                        <td className="px-6 py-4 border-t">{employee.role}</td>
-                                        <td className="px-6 py-4 border-t">{employee.department}</td>
-                                        <td className="px-6 py-4 border-t">{employee.internalNumber}</td>
-                                        <td className="px-6 py-4 border-t">{employee.directNumber}</td>
-                                        <td className="px-6 py-4 border-t">{employee.voipNumber}</td>
-                                        <td className="px-6 py-4 border-t">{employee.workLocation}</td>
+                                        <td className="px-6 py-4 font-medium border-t text-gray-800 group-hover:text-blue-700">{employee.name}</td>
+                                        <td className="px-6 py-4 border-t text-blue-900">{employee.role}</td>
+                                        <td className="px-6 py-4 border-t text-blue-900">{employee.department}</td>
+                                        <td className="px-6 py-4 border-t text-blue-900">{employee.internalNumber}</td>
+                                        <td className="px-6 py-4 border-t text-blue-900">{employee.directNumber}</td>
+                                        <td className="px-6 py-4 border-t text-blue-900">{employee.voipNumber}</td>
+                                        <td className="px-6 py-4 border-t text-blue-900">{employee.workLocation}</td>
                                         {userRole === "admin" && (
-                                            <td className="px-6 py-4 border-t">
+                                            <td className="px-6 py-4 border-t flex gap-2">
                                                 <button
-                                                    className="bg-red-500 text-white px-2 py-1 rounded mr-2"
+                                                    className="bg-blue-700 text-white px-3 py-1 rounded-lg shadow hover:bg-blue-800 transition font-semibold"
                                                 >
                                                     حذف
                                                 </button>
                                                 <button
-                                                    className="bg-blue-500 text-white px-2 py-1 rounded"
+                                                    className="bg-white text-blue-700 px-3 py-1 rounded-lg shadow hover:bg-blue-50 transition font-semibold border border-blue-200"
                                                 >
                                                     تعديل
                                                 </button>
@@ -122,7 +122,7 @@ const EmployeeList = ({ userRole, filters, searchText, setSelectedEmployee }) =>
                                 <tr>
                                     <td
                                         colSpan={userRole === "admin" ? 8 : 7}
-                                        className="px-6 py-4 text-center text-gray-500"
+                                        className="px-6 py-8 text-center text-blue-300 text-lg font-semibold"
                                     >
                                         لم يتم العثور على موظفين.
                                     </td>
@@ -133,11 +133,13 @@ const EmployeeList = ({ userRole, filters, searchText, setSelectedEmployee }) =>
                 )}
             </div>
             {userRole === "admin" && (
-                <button
-                    className="bg-green-500 text-white px-4 py-2 rounded mt-4"
-                >
-                    إضافة موظف
-                </button>
+                <div className="flex justify-end p-6">
+                    <button
+                        className="bg-blue-700 text-white px-6 py-2 rounded-xl shadow hover:bg-blue-800 transition font-semibold text-lg"
+                    >
+                        + إضافة موظف
+                    </button>
+                </div>
             )}
         </div>
     );
