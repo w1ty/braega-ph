@@ -5,12 +5,7 @@ import path from "path";
 import mysql from "mysql2";
 import db from './db.js';
 
-const employees = JSON.parse(
-fs.readFileSync(path.resolve("src/data/employees.json"), "utf-8")
-);
-const logins = JSON.parse(
-fs.readFileSync(path.resolve("src/data/logins.json"), "utf-8")
-);
+
 
 const app = express();
 const PORT = 3000;
